@@ -1,22 +1,60 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>案件情報入力</title>
-    <!-- Bootstrap CSSの読み込み -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>確認画面</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <!-- ここにHTMLを書く -->
-    </div>
-    <script type="module">
-        <!-- ここにJSを書く -->
-    </script>
-    <!-- BootstrapのJavaScriptの読み込み -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <div class="container mt-5">
+    <h2 class="mb-4">以下の内容で登録しますか？</h2>
+    <ul class="list-group mb-4" id="confirm-list"></ul>
+    <button class="btn btn-secondary" onclick="history.back()">戻る</button>
+    <button class="btn btn-primary" id="submit-btn">保存</button>
+  </div>
+
+  <script type="module">
+    import config from '../config.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const data = {
+      companyName: params.get("companyName"),
+      industry: params.get("industry"),
+      contact: params.get("contact"),
+      location: params.get("location")
+    };
+
+    const list = document.getElementById("confirm-list");
+    for (const key in data) {
+      const li = document.createElement("li");
+      li.className = "list-group-item";
+      li.textContent = `${key}: ${data[key]}`;
+      list.appendChild(li);
+    }
+
+    document.getElementById("submit-btn").addEventListener("click", () => {
+      fetch(`${config.apiUrl}/add-customer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(data)
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            alert("顧客情報が正常に登録されました！");
+            window.location.href = "/customer/list.html";
+          } else {
+            alert("登録に失敗しました。");
+          }
+        })
+        .catch(error => {
+          console.error("登録エラー:", error);
+          alert("通信エラーが発生しました。");
+        });
+    });
+  </script>
 </body>
 </html>
