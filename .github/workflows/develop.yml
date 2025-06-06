@@ -17,3 +17,5 @@ jobs:
           username: ${{ secrets.DEV_SSH_USER }}
           key: ${{ secrets.DEV_SSH_KEY }}
           script: bash /app/renta_ueno/deploy.sh renta_ueno
+
+# tesuto
