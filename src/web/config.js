@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: 'http://localhost:4754'
+  apiUrl: '/api_renta_ueno'
 };
 
 export default config;
