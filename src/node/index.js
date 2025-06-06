@@ -87,5 +87,3 @@ app.put("/customers/:id", async (req, res) => {
   );
   res.json({ success: true });
 });
-
-// テスト
