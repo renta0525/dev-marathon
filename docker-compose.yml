@@ -6,6 +6,7 @@ services:
       - "80:80"
     volumes:
       - "./src/web:/usr/share/nginx/html"
+      - "./nginx/nginx.conf:/etc/nginx/conf.d/api.conf"
       - "./work:/work"
     working_dir: /usr/share/nginx/html
     tty: true
