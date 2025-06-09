@@ -63,13 +63,6 @@ app.get("/customers/:id", async (req, res) => {
   }
 });
 
-// 顧客詳細取得API
-app.get("/customers/:id", async (req, res) => {
-  const { id } = req.params;
-  const result = await pool.query("SELECT * FROM customers WHERE customer_id = $1", [id]);
-  res.json(result.rows[0]);
-});
-
 // 顧客削除API
 app.delete("/customers/:id", async (req, res) => {
   const { id } = req.params;
