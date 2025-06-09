@@ -13,10 +13,10 @@ app.use(express.static("public"));
 
 // DB接続
 const pool = new Pool({
-  user: "user_4754",
+  user: "user_renta_ueno",            // ✅ 修正
   host: "localhost",
-  database: "crm_4754",
-  password: "pass_4754",
+  database: "db_renta_ueno",          // ✅ 修正
+  password: "5Rw5YDaWc5jc",           // ✅ 修正
   port: 5432,
 });
 
