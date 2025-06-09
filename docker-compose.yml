@@ -15,9 +15,11 @@ services:
     ports:
       - "4754:4754"
     volumes:
-      - "./src/node:/app"
+      # - "./src/node:/app"
+      - "./src:/app"
       - "./work:/work"
-    working_dir: /app
+    # working_dir: /app
+    working_dir: /app/src/node
     tty: true
   db:
     container_name: "postgres"
