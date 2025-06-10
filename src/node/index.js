@@ -82,8 +82,8 @@ router.put("/customers/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-// 🔽 ここで /api_renta_ueno にマウントする
-app.use("/api_renta_ueno", router);
+// // 🔽 ここで /api_renta_ueno にマウントする
+// app.use("/api_renta_ueno", router);
 
 // サーバ起動
 app.listen(port, '0.0.0.0', () => {
