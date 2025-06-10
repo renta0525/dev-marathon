@@ -20,11 +20,9 @@ const pool = new Pool({
   port: 5432,
 });
 
-// 🔽 API用のRouterを作成
-const router = express.Router();
 
 // 顧客一覧取得API
-router.get("/customers", async (req, res) => {
+app.get("/customers", async (req, res) => {
   try {
     const customerData = await pool.query("SELECT * FROM customers");
     res.json(customerData.rows);
@@ -35,7 +33,7 @@ router.get("/customers", async (req, res) => {
 });
 
 // 顧客追加API
-router.post("/add-customer", async (req, res) => {
+app.post("/add-customer", async (req, res) => {
   try {
     const { companyName, industry, contact, location } = req.body;
     const newCustomer = await pool.query(
@@ -50,7 +48,7 @@ router.post("/add-customer", async (req, res) => {
 });
 
 // 顧客詳細取得API
-router.get("/customers/:id", async (req, res) => {
+app.get("/customers/:id", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM customers WHERE customer_id = $1", [req.params.id]);
     if (result.rows.length === 0) {
@@ -65,14 +63,14 @@ router.get("/customers/:id", async (req, res) => {
 });
 
 // 顧客削除API
-router.delete("/customers/:id", async (req, res) => {
+app.delete("/customers/:id", async (req, res) => {
   const { id } = req.params;
   await pool.query("DELETE FROM customers WHERE customer_id = $1", [id]);
   res.json({ success: true });
 });
 
 // 顧客更新API
-router.put("/customers/:id", async (req, res) => {
+app.put("/customers/:id", async (req, res) => {
   const { id } = req.params;
   const { company_name, industry, contact, location } = req.body;
   await pool.query(
@@ -82,8 +80,6 @@ router.put("/customers/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-// // 🔽 ここで /api_renta_ueno にマウントする
-// app.use("/api_renta_ueno", router);
 
 // サーバ起動
 app.listen(port, '0.0.0.0', () => {
