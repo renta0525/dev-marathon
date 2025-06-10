@@ -51,5 +51,3 @@ services:
       PGADMIN_DEFAULT_PASSWORD: pass
     depends_on:
       - db
-
-      # てすと
