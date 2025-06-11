@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 const { Pool } = require("pg");
+const path = require("path");
 
 const app = express();
 const port = 4754;
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
+app.use('/renta_ueno', express.static(path.join(__dirname, '../web')));
 
 // DB接続
 const pool = new Pool({
