@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
-app.use('/renta_ueno', express.static(path.join(__dirname, '../web')));
+app.use('/renta_ueno', express.static('/app/renta_ueno/src/web'));
 
 // DB接続
 const pool = new Pool({
