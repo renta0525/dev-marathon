@@ -1,31 +1,53 @@
-describe('顧客情報入力フォームのテスト', () => {
-  it('顧客情報を入力して送信し、成功メッセージを確認する', () => {
-    cy.visit('/nishi/customer/add.html'); // テスト対象のページにアクセス
+// 24KM：確認画面の保存テスト
+describe('顧客情報確認画面のテスト', () => {
+  it('保存ボタンを押したとき、成功アラートが表示されること', () => {
+    cy.intercept('POST', '**/add-customer', {
+      statusCode: 200,
+      body: { success: true },
+    }).as('addCustomer');
+
+    const params = new URLSearchParams({
+      companyName: 'テスト会社',
+      industry: 'IT',
+      contact: '03-1234-5678',
+      location: '東京'
+    });
+
+    cy.visit(`/renta_ueno/customer/add-confirm.html?${params.toString()}`);
+
     cy.window().then((win) => {
-      // windowのalertをスタブ化し、エイリアスを設定
       cy.stub(win, 'alert').as('alertStub');
     });
 
-    // テストデータの読み込み
-    cy.fixture('customerData').then((data) => {
-      // フォームの入力フィールドにテストデータを入力
-      const uniqueContactNumber = `03-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
-      cy.get('#companyName').type(data.companyName);
-      cy.get('#industry').type(data.industry);
-      cy.get('#contact').type(uniqueContactNumber);
-      cy.get('#location').type(data.location);
-    });
+    cy.get('#submit-btn').click();
+    cy.wait('@addCustomer');
 
-    // フォームの送信
-    cy.get('#customer-form').submit();
+    cy.get('@alertStub').should('have.been.calledWith', '顧客情報が正常に登録されました！');
+  });
+});
 
-    cy.get('@alertStub').should('have.been.calledOnceWith', '顧客情報が正常に保存されました。');
 
-    // フォームがリセットされたことを確認
-    cy.get('#companyName').should('have.value', '');
-    cy.get('#industry').should('have.value', '');
-    cy.get('#contact').should('have.value', '');
-    cy.get('#location').should('have.value', '');
-    cy.wait(5000);
+// 25KM(1)：一覧ページの表示確認テスト（★見出しを英語に修正）
+describe('顧客一覧画面のテスト', () => {
+  it('一覧ページが表示され、列名が含まれていること', () => {
+    cy.visit('/renta_ueno/customer/list.html');
+
+    cy.contains('Company Name').should('exist');
+    cy.contains('Contact').should('exist');
+  });
+});
+
+
+// 25KM(2)：詳細ページの入力欄存在テスト（★name属性でチェック）
+describe('顧客詳細画面のテスト', () => {
+  it('詳細ページが開き、入力欄が表示されていること', () => {
+    cy.visit('/renta_ueno/customer/detail.html?id=1');
+
+    cy.contains('顧客詳細').should('exist');
+
+    cy.get('input[name="company_name"]').should('exist');
+    cy.get('input[name="industry"]').should('exist');
+    cy.get('input[name="contact"]').should('exist');
+    cy.get('input[name="location"]').should('exist');
   });
 });
